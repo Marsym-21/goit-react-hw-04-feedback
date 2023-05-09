@@ -1,4 +1,5 @@
 import css from './Feedback.module.css';
+import PropTypes from 'prop-types';
 import Notification from './Notification';
 
 const Statistics = props => {
@@ -21,6 +22,15 @@ const Statistics = props => {
       )}
     </div>
   );
+};
+
+Statistics.propTypes = {
+  good: PropTypes.number.isRequired,
+  neutral: PropTypes.number.isRequired,
+  bad: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  complite: PropTypes.bool.isRequired,
+  positivePercentage: PropTypes.string.isRequired,
 };
 
 export default Statistics;

@@ -1,74 +1,52 @@
-import PropTypes from 'prop-types';
 import css from './Feedback.module.css';
-import React from 'react';
+import { useState, useRef } from 'react';
 import Statistics from './Statistics';
 import FeedbackOptions from './FeedbackOptions';
 
-class Feedback extends React.Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+const Feedback = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  complite = false;
+  let complite = useRef(false);
 
-  onLeaveFeedback = e => {
-    this.complite = true;
-    this.onAddFeedback(e);
-  };
-
-  onAddFeedback = e => {
-    const object = e.target.textContent.toLocaleLowerCase();
-    switch (object) {
+  const onLeaveFeedback = data => {
+    complite.current = true;
+    switch (data) {
       case 'good':
-        this.setState(prevState => {
-          return { good: prevState.good + 1 };
-        });
+        setGood(s => s + 1);
         break;
       case 'neutral':
-        this.setState(prevState => ({ neutral: prevState.neutral + 1 }));
+        setNeutral(s => s + 1);
         break;
       case 'bad':
-        this.setState(prevState => ({ bad: prevState.bad + 1 }));
+        setBad(s => s + 1);
         break;
+
       default:
         break;
     }
   };
+  const total = good + neutral + bad;
+  const positivePercentage = ((good / total) * 100).toFixed([0]);
 
-  render() {
-    const state = this.state;
-    const { good, neutral, bad } = state;
-    const total = good + neutral + bad;
-    const positivePercentage = ((good / total) * 100).toFixed([0]);
-    return (
-      <div className={css.profile}>
-        <h1 className={css.profile_title}>Please leave feedback</h1>
-        <FeedbackOptions
-          onLeaveFeedback={this.onLeaveFeedback}
-          options={this.state}
-        />
-        <Statistics
-          good={good}
-          neutral={neutral}
-          bad={bad}
-          total={total}
-          positivePercentage={positivePercentage}
-          complite={this.complite}
-        />
-      </div>
-    );
-  }
-  onPropTypes = {
-    good: PropTypes.number.isRequired,
-    neutral: PropTypes.number.isRequired,
-    bad: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    complite: PropTypes.bool.isRequired,
-    positivePercentage: PropTypes.number.isRequired,
-    onLeaveFeedback: PropTypes.string.isRequired,
-  };
-}
+  return (
+    <div className={css.profile}>
+      <h1 className={css.profile_title}>Please leave feedback</h1>
+      <FeedbackOptions
+        onLeaveFeedback={onLeaveFeedback}
+        options={['good', 'neutral', 'bad']}
+      />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        positivePercentage={positivePercentage}
+        complite={complite.current}
+      />
+    </div>
+  );
+};
 
 export default Feedback;
