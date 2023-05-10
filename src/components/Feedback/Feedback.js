@@ -1,12 +1,16 @@
 import css from './Feedback.module.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useReducer } from 'react';
 import Statistics from './Statistics';
 import FeedbackOptions from './FeedbackOptions';
 
+function countReducer(prevState, nextState) {
+  return prevState + nextState;
+}
+
 const Feedback = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [good, setGood] = useReducer(countReducer, 0);
+  const [neutral, setNeutral] = useReducer(countReducer, 0);
+  const [bad, setBad] = useReducer(countReducer, 0);
 
   let complite = useRef(false);
 
@@ -14,13 +18,13 @@ const Feedback = () => {
     complite.current = true;
     switch (data) {
       case 'good':
-        setGood(s => s + 1);
+        setGood(1);
         break;
       case 'neutral':
-        setNeutral(s => s + 1);
+        setNeutral(1);
         break;
       case 'bad':
-        setBad(s => s + 1);
+        setBad(1);
         break;
 
       default:
