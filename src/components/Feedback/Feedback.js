@@ -1,5 +1,5 @@
 import css from './Feedback.module.css';
-import { useState, useRef, useReducer } from 'react';
+import { useRef, useReducer } from 'react';
 import Statistics from './Statistics';
 import FeedbackOptions from './FeedbackOptions';
 
